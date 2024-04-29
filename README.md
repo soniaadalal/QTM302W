@@ -40,13 +40,13 @@ Deportation of lower-income groups may be associated with higher homicide rates.
 Lower corruption scores indicating higher percieved corruption of the government may be associated with higher homicide rates. 
 
 ### Models and Visualization Techniques
-- We are using [specific models or techniques] to [describe how you're using them].
+The repository includes code for generating various visualizations to analyze the relationships between different variables in the dataset. This includes correlation plots, bar plots, scatter plots, and line plots to provide insights into the data.
 
 ### Current Challenges
-- Currently, we are facing [briefly describe the challenges you're encountering].
+- Currently, we are facing the limitation of a time gap. The data set provides data from 2004 to 2014 which may be too small of a timeline to see a trend. 
 
 ### Next Steps (Future Directions)
-- Our next steps include [mention potential future directions or plans].
+- Our next steps include getting more comprehensive data perhaps for specific countries within the Latin American & Caribbean region to really get a understanding of the true factors that can affect violence.
 
 ## Getting Started
 
@@ -63,34 +63,16 @@ Feel free to explore the materials in this repository and replicate our analysis
 
 ## Directory Structure
 ```
-└── Edit me to generate/
-    ├── a/
-    │   └── nice/
-    │       └── tree/
-    │           ├── diagram!
-    │           └── :)
-    └── Use indentation/
-        ├── to indicate/
-        │   ├── file
-        │   ├── and
-        │   ├── folder
-        │   └── nesting.
-        └── You can even/
-            └── use/
-                ├── markdown
-                └── bullets!
+└── QTM302W_Project_Repository
+  ├── data/
+  │   └── data_replic.csv
+  ├── notebooks/
+  │   └── EDA_notebook.ipynb
+  └── README.md
+
 ```
 
 ## Contact Info
 
 For any inquiries or feedback, feel free to contact us at spdalal@emory.edu.
-
-
-
-
-
-
-
-
-
 
