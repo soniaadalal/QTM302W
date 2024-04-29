@@ -1,0 +1,1239 @@
+plm.fe_plm <- plm(form_i_plm , data = data_LAC2, model = "within"); summary(plm.fe_plm)
+plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)
+plm.fe_plm <- plm(form_i_plm , data = data_LAC2, model = "within"); summary(plm.fe_plm)
+plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)
+plm.fe_plm <- plm(form_i_plm , data = data_LAC2, model = "within"); summary(plm.fe_plm)
+plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)
+plm.fe_plm <- plm(form_i_plm , data = data_LAC2, model = "within"); summary(plm.fe_plm)
+plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)
+plm.fe_plm <- plm(form_i_plm , data = data_LAC2, model = "within"); summary(plm.fe_plm)
+library(plm)#
+	library(lmtest)#
+	library(clubSandwich)#
+#
+# laod data#
+	data <- read.csv("data_replic.csv")#
+	data <- pdata.frame(data, index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)#
+	data$year <- as.integer(as.vector(data$year))#
+	head(data)
+form_i_plm <- as.formula(("homrates_unodc ~ deport_criminal + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# (2) convicts'deportation rates, with time-varying controls and country fixed effects#
+	Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# (3) change in convicts'deportation rates, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm1)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# (4) change in convicts'deportation rates and change in non-convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + deport_noncriminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# (5) change in convicts'deportation rates and change in leading values of convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + deport_criminal_lead + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_LAC <- subset(data, data$region == "Latin America & Caribbean")
+data_LAC3 <- subset(data_LAC, !is.na(data_LAC$homrates_who))
+Xnms <- "  +  remittances_GDP    +  pop_sh14  +  yr_sch  + crime_US_weight  +  GDP_growth  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate   +  urban_interp  +  polity2  +  corruption"#
+# (1) #
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (2)
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC3, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC3, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_LAC3 <- subset(data_LAC, !is.na(data_LAC$homrates_who))
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC3, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+Xnms <- "  +  remittances_GDP  +  pop_sh14  	+  yr_sch  	+  GDP_growth  	+  population_log  	+  GDPpercapita_const2010USD_log  +  gini_mkt 	+  war_intrastate   	+  urban_interp  	+  polity2  	+  corruption"
+form_i_plm <- as.formula(paste("homrates_who ~ deport_criminal + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_who ~ deport_criminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_who ~ deport_criminal + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)
+library(plm)#
+	library(lmtest)#
+	library(clubSandwich)#
+#
+# laod data#
+	data <- read.csv("data_replic.csv")#
+	data <- pdata.frame(data, index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)#
+	data$year <- as.integer(as.vector(data$year))#
+	head(data)
+form_i_plm <- as.formula(("homrates_unodc ~ deport_criminal + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# (2) convicts'deportation rates, with time-varying controls and country fixed effects#
+	Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm1)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# (4) change in convicts'deportation rates and change in non-convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + deport_noncriminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# (5) change in convicts'deportation rates and change in leading values of convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + deport_criminal_lead + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_LAC <- subset(data, data$region == "Latin America & Caribbean")
+Xnms <- "  +  remittances_GDP    +  pop_sh14  +  yr_sch  + crime_US_weight  +  GDP_growth  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate   +  urban_interp  +  polity2  +  corruption"
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_LAC2 <- pdata.frame(read.csv("data_subLAC.csv"), index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)	#
+	form_i_plm <- as.formula(paste("homrates_pc_unodc_roll2 ~ deport_criminal_pc_interp_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC2, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# why the same here? Coeffucent of 12?#
+	data_2 <- pdata.frame(read.csv("data_exportmurder_2yr_subset.csv"), index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)	#
+	form_i_plm <- as.formula(paste("homrates_pc_unodc_roll2 ~ deport_crim_pc_diff + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_2, model = "within", subset = region == "Latin America & Caribbean"); summary(plm.fe_plm); coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_LAC2 <- pdata.frame(read.csv("data_subLAC.csv"), index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)	#
+	form_i_plm <- as.formula(paste("homrates_pc_unodc_roll2 ~ deport_criminal_pc_interp_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC2, model = "within"); summary(plm.fe_plm)
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within", subset= deport_criminal_d <=-100); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within", subset= deport_criminal_d >=-100); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_criminal_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within", subset= deport_criminal_d >=-50); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+plot(data_LAC$deport_criminal_d)
+plot(data_LAC$deport_criminal_d, data_LAC$homrates_unodc)
+library(plm)#
+	library(lmtest)#
+	library(clubSandwich)#
+#
+# laod data#
+	data <- read.csv("data_replic.csv")#
+	data <- pdata.frame(data, index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)#
+	data$year <- as.integer(as.vector(data$year))#
+	head(data)#
+#
+# CHANGE:
+form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm1)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# (4) change in convicts'deportation rates and change in non-convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_nonconvict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# (5) change in convicts'deportation rates and change in leading values of convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_convict_lead + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_LAC <- subset(data, data$region == "Latin America & Caribbean")#
+# here, I subset to those that have WHO data. Although I run the code below on UNODC data in part?	#
+#	data_LAC3 <- subset(data_LAC, !is.na(data_LAC$homrates_who))#
+	Xnms <- "  +  remittances_GDP    +  pop_sh14  +  yr_sch  + crime_US_weight  +  GDP_growth  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate   +  urban_interp  +  polity2  +  corruption"
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_LAC2 <- pdata.frame(read.csv("data_subLAC.csv"), index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)	#
+	form_i_plm <- as.formula(paste("homrates_pc_unodc_roll2 ~ deport_convict_pc_interp_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC2, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_pc_unodc_roll2 ~ deport_criminal_pc_interp_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC2, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+Xnms <- "  +  remittances_GDP  +  pop_sh14  	+  yr_sch  	+  GDP_growth  	+  population_log  	+  GDPpercapita_const2010USD_log  +  gini_mkt +  war_intrastate +  urban_interp  	+  polity2  	+  corruption"#
+# (3) #
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"
+form_i_plm <- as.formula(paste("deport_convict ~ instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1 + as.factor(year) ", Xnms))
+plm.fe_plmD1 <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plmD1); coeftest(plm.fe_plmD1,
+vcov.=vcovHC(plm.fe_plmD1))
+form_i_plm <- as.formula(paste("deport_convict_d ~ instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1 + as.factor(year) ", Xnms))
+plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+form_i_plm <- as.formula(paste("deport_convict ~ instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1 + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)
+form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms, "| . - deport_convict + as.factor(year)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))
+plm.fe_iv1 <- plm(form_iv , data = data_5p, model = "within"); summary(plm.fe_iv1); coeftest(plm.fe_iv1, vcov.=vcovHC(plm.fe_iv1))
+plm.fe_iv1 <- plm(form_iv , data = data, model = "within"); summary(plm.fe_iv1); coeftest(plm.fe_iv1, vcov.=vcovHC(plm.fe_iv1))
+library(AER)
+form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms, "| . - deport_convict + as.factor(year)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))		#
+	plm.fe_iv1 <- plm(form_iv , data = data, model = "within"); summary(plm.fe_iv1); coeftest(plm.fe_iv1, vcov.=vcovHC(plm.fe_iv1))
+form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) + as.factor(iso3) ", Xnms, "| . - deport_convict + as.factor(year) + as.factor(iso3)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))
+summary(fit_iv <- ivreg(form_iv, x=TRUE, data = data_5p))
+summary(fit_iv <- ivreg(form_iv, x=TRUE, data = data))
+summary(fit_iv, df = Inf, diagnostics = TRUE)
+form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms, "| . - deport_convict + as.factor(year)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))		#
+	plm.fe_iv1 <- plm(form_iv , data = data_LAC, model = "within"); summary(plm.fe_iv1); coeftest(plm.fe_iv1, vcov.=vcovHC(plm.fe_iv1))
+form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) + as.factor(iso3) ", Xnms, "| . - deport_convict + as.factor(year) + as.factor(iso3)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))#
+	summary(fit_iv <- ivreg(form_iv, x=TRUE, data = instr_enforce_everify_lag1))#
+	summary(fit_iv, df = Inf, diagnostics = TRUE)
+summary(fit_iv <- ivreg(form_iv, x=TRUE, data = data_LAC))#
+	summary(fit_iv, df = Inf, diagnostics = TRUE)
+Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +   GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"
+form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms, "| . - deport_convict + as.factor(year)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))		#
+	plm.fe_iv1 <- plm(form_iv , data = data_LAC, model = "within"); summary(plm.fe_iv1); coeftest(plm.fe_iv1, vcov.=vcovHC(plm.fe_iv1))#
+# using ivreg #
+	form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) + as.factor(iso3) ", Xnms, "| . - deport_convict + as.factor(year) + as.factor(iso3)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))#
+	summary(fit_iv <- ivreg(form_iv, x=TRUE, data = data_LAC))#
+	summary(fit_iv, df = Inf, diagnostics = TRUE)
+data_emdc <- subset(data, data$income_group != "High income: OECD")
+form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_emdc, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+library(plm)#
+	library(lmtest)#
+	library(clubSandwich)#
+	library(AER)#
+	library (calibrate)#
+# ---------------------------#
+# Figure 1#
+# ---------------------------#
+#
+# show corrrelation between homicides and derpotations#
+# all refers to average values over the period 2000 to 2016, in logs#
+	agg_mean_graph <- read.csv("data_figure1.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot_y <- log(agg_mean_graph$homrates_pc_unodc_mn +1)#
+	plot_x <- log(agg_mean_graph$deport_convict_mn +1)	#
+	PL <- na.omit(data.frame(agg_mean_graph$iso3, plot_x, plot_y))#
+	ytext <- round(exp(seq(from = 0, to= max(plot_y, na.rm=T))), digits=0)-1#
+	xtext <- round(exp(seq(from = 0, to= max(plot_x, na.rm=T))), digits=0)-1#
+	ytext <- c(0,3,5,10,25,50)#
+	xtext <- c(0,3,5,10,25,50,100,250)#
+	plot(PL$plot_x, PL$plot_y, xaxt = "n", yaxt = "n", ylab="homicide rates \n (UNODC, average 2000-2015)", xlab="deportation rates (average 2000-2015)", ylim=c(min(PL$plot_y)-.5, max(PL$plot_y)+.5), xlim=c(-1,5.5), main="", cex.lab=.8)#
+# enlarge the margins a little!	#
+# check correctness of what I ddi here?#
+	axis(2, at= log(ytext+1), labels= ytext, cex.axis = .7)#
+	axis(1, at= log(xtext+1), labels= xtext, cex.axis = .7) # add here the other axis too with value!#
+	textxy(PL$plot_x, PL$plot_y, PL$agg_mean_graph.iso3, cex = .6, col = "black", m = c(1, 1))
+data <- read.csv("data_replic.csv")	#
+	data <- pdata.frame(data, index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)#
+	data$year <- as.integer(as.vector(data$year))#
+	head(data)
+form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (2) convicts'deportation rates, with time-varying controls and country fixed effects#
+	Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# (3) change in convicts'deportation rates, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm1)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (4) change in convicts'deportation rates and change in non-convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_nonconvict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (5) change in convicts'deportation rates and change in leading values of convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_convict_lead + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_LAC <- subset(data, data$region == "Latin America & Caribbean")#
+# here, I subset to those that have WHO data. Although I run the code below on UNODC data in part?	#
+#	data_LAC3 <- subset(data_LAC, !is.na(data_LAC$homrates_who))#
+#
+	Xnms <- "  +  remittances_GDP    +  pop_sh14  +  yr_sch  + crime_US_weight  +  GDP_growth  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt    +  urban_interp  +  polity2  +  corruption"#
+# (1) #
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (2) #
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# note: there was an error here becuase I subsetted to observations that also had WHO data, this was wrong.#
+# we should therefore fix column 2 in Table 2. Everything else should be correct#
+# The following is a subset of fewer observations#
+	data_LAC2 <- pdata.frame(read.csv("data_subLAC.csv"), index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)	#
+	form_i_plm <- as.formula(paste("homrates_pc_unodc_roll2 ~ deport_criminal_pc_interp_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC2, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+	data_test <- merge(data_LAC2, data_LAC, by=c("iso3", "year"), all=T)#
+	attach(data_test)#
+	plot(homrates_pc_unodc_roll2, homrates_pc_unodc)	#
+	cbind(iso3, year, homrates_pc_unodc_roll2, homrates_pc_unodc)#
+	plot(deport_convict_d, deport_convict_pc_interp_d) #
+#	deport_convict_pc_interp_d[deport_convict_pc_interp_d <=-100]#
+	detach(data_test)	#
+# these are the same as they should#
+# is there something wth the outlier?#
+# now, repeat those but use the WHO data and a smaller set of controls#
+# this allows us to go further back in time#
+#
+	Xnms <- "  +  remittances_GDP  +  pop_sh14  	+  yr_sch  	+  GDP_growth  	+  population_log  	+  GDPpercapita_const2010USD_log  +  gini_mkt +  urban_interp  	+  polity2  	+  corruption"#
+# (3) #
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (4) #
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_emdc <- subset(data, data$income_group != "High income: OECD")#
+#
+# run the same models#
+# (1) convicts'deportation rates, no controls, only country and year fixed effects#
+	form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_emdc, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(("homrates_who ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(("homrates_who ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (2) convicts'deportation rates, with time-varying controls and country fixed effects#
+# define control variables:#
+	Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm1)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (4) change in convicts'deportation rates and change in non-convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + deport_nonconvict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + deport_convict_lead + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data <- read.csv("data_replic.csv")	#
+	data <- pdata.frame(data, index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)#
+	data$year <- as.integer(as.vector(data$year))#
+	head(data)#
+# (1) convicts'deportation rates, no controls, only country and year fixed effects#
+	form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+library(plm)#
+	library(lmtest)#
+	library(clubSandwich)#
+	library(AER)#
+	library (calibrate)
+data <- read.csv("data_replic.csv")	#
+	data <- pdata.frame(data, index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)#
+	data$year <- as.integer(as.vector(data$year))#
+	head(data)#
+# (1) convicts'deportation rates, no controls, only country and year fixed effects#
+	form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm1)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_LAC <- subset(data, data$region == "Latin America & Caribbean")#
+# here, I subset to those that have WHO data. Although I run the code below on UNODC data in part?	#
+#	data_LAC3 <- subset(data_LAC, !is.na(data_LAC$homrates_who))#
+#
+	Xnms <- "  +  remittances_GDP    +  pop_sh14  +  yr_sch  + crime_US_weight  +  GDP_growth  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt    +  urban_interp  +  polity2  +  corruption"#
+# (1) #
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+Xnms <- "  +  remittances_GDP  +  pop_sh14  	+  yr_sch  	+  GDP_growth  	+  population_log  	+  GDPpercapita_const2010USD_log  +  gini_mkt +  urban_interp  	+  polity2  	+  corruption"#
+# (3) for deportation rates in levels#
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_LAC$year
+unique(data_LAC$year)
+coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+library(plm)#
+	library(lmtest)#
+	library(clubSandwich)#
+	library(AER)#
+	library (calibrate)#
+# ---------------------------#
+# Figure 1#
+# ---------------------------#
+#
+# data XXXX#
+# ---------------------------#
+# Figure 2#
+# ---------------------------#
+#
+# show corrrelation between homicides and derpotations#
+# all refers to average values over the period 2000 to 2016, in logs#
+	agg_mean_graph <- read.csv("data_figure1.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot_y <- log(agg_mean_graph$homrates_pc_unodc_mn +1)#
+	plot_x <- log(agg_mean_graph$deport_convict_mn +1)	#
+	PL <- na.omit(data.frame(agg_mean_graph$iso3, plot_x, plot_y))#
+	ytext <- round(exp(seq(from = 0, to= max(plot_y, na.rm=T))), digits=0)-1#
+	xtext <- round(exp(seq(from = 0, to= max(plot_x, na.rm=T))), digits=0)-1#
+	ytext <- c(0,3,5,10,25,50)#
+	xtext <- c(0,3,5,10,25,50,100,250)#
+	plot(PL$plot_x, PL$plot_y, xaxt = "n", yaxt = "n", ylab="homicide rates \n (UNODC, average 2000-2015)", xlab="deportation rates (average 2000-2015)", ylim=c(min(PL$plot_y)-.5, max(PL$plot_y)+.5), xlim=c(-1,5.5), main="", cex.lab=.8)#
+# enlarge the margins a little!	#
+# check correctness of what I ddi here?#
+	axis(2, at= log(ytext+1), labels= ytext, cex.axis = .7)#
+	axis(1, at= log(xtext+1), labels= xtext, cex.axis = .7) # add here the other axis too with value!#
+	textxy(PL$plot_x, PL$plot_y, PL$agg_mean_graph.iso3, cex = .6, col = "black", m = c(1, 1))#
+# ---------------------------#
+# Table 1: Effect of US Deportations of Convicts on Origin Countries’ Homicide Rates#
+# ---------------------------#
+#
+# laod data#
+	data <- read.csv("data_replic.csv")	#
+	data <- pdata.frame(data, index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)#
+	data$year <- as.integer(as.vector(data$year))#
+	head(data)#
+# (1) convicts'deportation rates, no controls, only country and year fixed effects#
+	form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (2) convicts'deportation rates, with time-varying controls and country fixed effects#
+#
+# define control variables:#
+	Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# (3) change in convicts'deportation rates, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm1)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (4) change in convicts'deportation rates and change in non-convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_nonconvict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (5) change in convicts'deportation rates and change in leading values of convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_convict_lead + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# ---------------------------#
+# Table 2: Effect of US Deportations of Convicts on Origin Countries’ Homicide Rates (only Latin America and Caribbean Countries) #
+# ---------------------------#
+#
+# subset to Latin American and the Caribbean region#
+	data_LAC <- subset(data, data$region == "Latin America & Caribbean")#
+# here, I subset to those that have WHO data. Although I run the code below on UNODC data in part?	#
+#	data_LAC3 <- subset(data_LAC, !is.na(data_LAC$homrates_who))#
+#
+	Xnms <- "  +  remittances_GDP    +  pop_sh14  +  yr_sch  + crime_US_weight  +  GDP_growth  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt    +  urban_interp  +  polity2  +  corruption"#
+# (1) #
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (2) #
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_LAC <- subset(data, data$region == "Latin America & Caribbean")#
+# here, I subset to those that have WHO data. Although I run the code below on UNODC data in part?	#
+#	data_LAC3 <- subset(data_LAC, !is.na(data_LAC$homrates_who))#
+#
+	Xnms <- "  +  remittances_GDP    +  pop_sh14  +  yr_sch  + crime_US_weight  +  GDP_growth  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt    +  urban_interp  +  polity2  +  corruption"#
+# (1) #
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (2) #
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+Xnms <- "  +  remittances_GDP  +  pop_sh14  	+  yr_sch  	+  GDP_growth  	+  population_log  	+  GDPpercapita_const2010USD_log  +  gini_mkt +  urban_interp  	+  polity2  	+  corruption"#
+# (3) for deportation rates in levels#
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm)) # robust
+form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm)) # robust#
+#
+# -
+data_emdc <- subset(data, data$income_group != "High income: OECD")#
+#
+# run the same models#
+# (1) convicts'deportation rates, no controls, only country and year fixed effects#
+	form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_emdc, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+form_i_plm <- as.formula(("homrates_who ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))#
+# (3)
+plm.fe_plm <- plm(form_i_plm , data = data, subset=year>=2000, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+form_i_plm <- as.formula(("homrates_who ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, subset=year>=2000, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+Xnms <- "  +  remittances_GDP  +  pop_sh14  	+  yr_sch  	+  GDP_growth  	+  population_log  	+  GDPpercapita_const2010USD_log  +  gini_mkt +  urban_interp  	+  polity2  	+  corruption"#
+# (3) for deportation rates in levels#
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm)) # robust
+form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)
+form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + deport_nonconvict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + deport_convict_lead + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+data_3y <- pdata.frame(read.csv("data_replic_3y.csv"), index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)	#
+# run models as in Table 1#
+	# run the same models#
+# (1) convicts'deportation rates, no controls, only country and year fixed effects#
+	form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_3y, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_3y, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+data <- read.csv("data_replic.csv")	#
+	data <- pdata.frame(data, index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)#
+	data$year <- as.integer(as.vector(data$year))#
+	head(data)
+form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)
+Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_LAC <- subset(data, data$region == "Latin America & Caribbean")#
+# here, I subset to those that have WHO data. Although I run the code below on UNODC data in part?	#
+#	data_LAC3 <- subset(data_LAC, !is.na(data_LAC$homrates_who))#
+#
+	Xnms <- "  +  remittances_GDP    +  pop_sh14  +  yr_sch  + crime_US_weight  +  GDP_growth  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt    +  urban_interp  +  polity2  +  corruption"#
+# (1) #
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+Xnms <- "  corruption + crime_US_weight   + GDP_growth pop_sh14  + GDPpercapita_const2010USD_log + gini_mkt + polity2 + population_log + remittances_GDP + yr_sch  +  urban_interp  +  "
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+Xnms <- " +  corruption + crime_US_weight   + GDP_growth pop_sh14  + GDPpercapita_const2010USD_log + gini_mkt + polity2 + population_log + remittances_GDP + yr_sch  +  urban_interp  +  "
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+Xnms <- " +  corruption + crime_US_weight   + GDP_growth pop_sh14  + GDPpercapita_const2010USD_log + gini_mkt + polity2 + population_log + remittances_GDP + yr_sch  +  urban_interp    "
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+Xnms <- " +  corruption + crime_US_weight  + GDP_growth pop_sh14  + GDPpercapita_const2010USD_log + gini_mkt + polity2 + population_log + remittances_GDP + yr_sch  +  urban_interp"
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))
+Xnms <- " +  corruption + crime_US_weight  + GDP_growth pop_sh14  + GDPpercapita_const2010USD_log + gini_mkt + polity2 + population_log + remittances_GDP + yr_sch  +  urban_interp"
+Xnms
+Xnms <- " +  corruption + crime_US_weight  + GDP_growth + pop_sh14  + GDPpercapita_const2010USD_log + gini_mkt + polity2 + population_log + remittances_GDP + yr_sch  +  urban_interp"
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+library(plm)#
+	library(lmtest)#
+	library(clubSandwich)#
+	library(AER)#
+	library (calibrate)
+agg_mean_graph <- read.csv("data_figure1.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot_y <- log(agg_mean_graph$homrates_pc_unodc_mn +1)#
+	plot_x <- log(agg_mean_graph$deport_convict_mn +1)	#
+	PL <- na.omit(data.frame(agg_mean_graph$iso3, plot_x, plot_y))#
+	ytext <- round(exp(seq(from = 0, to= max(plot_y, na.rm=T))), digits=0)-1#
+	xtext <- round(exp(seq(from = 0, to= max(plot_x, na.rm=T))), digits=0)-1#
+	ytext <- c(0,3,5,10,25,50)#
+	xtext <- c(0,3,5,10,25,50,100,250)#
+	plot(PL$plot_x, PL$plot_y, xaxt = "n", yaxt = "n", ylab="homicide rates \n (UNODC, average 2000-2015)", xlab="deportation rates (average 2000-2015)", ylim=c(min(PL$plot_y)-.5, max(PL$plot_y)+.5), xlim=c(-1,5.5), main="", cex.lab=.8)#
+# enlarge the margins a little!	#
+# check correctness of what I ddi here?#
+	axis(2, at= log(ytext+1), labels= ytext, cex.axis = .7)#
+	axis(1, at= log(xtext+1), labels= xtext, cex.axis = .7) # add here the other axis too with value!#
+	textxy(PL$plot_x, PL$plot_y, PL$agg_mean_graph.iso3, cex = .6, col = "black", m = c(1, 1))
+data <- read.csv("data_replic.csv")	#
+	data <- pdata.frame(data, index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)#
+	data$year <- as.integer(as.vector(data$year))#
+	head(data)
+form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (2) convicts'deportation rates, with time-varying controls and country fixed effects#
+#
+# define control variables:#
+	Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# (3) change in convicts'deportation rates, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm1)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (4) change in convicts'deportation rates and change in non-convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_nonconvict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (5) change in convicts'deportation rates and change in leading values of convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_convict_lead + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+Xnms <- " +  war_intrastate + corruption + crime_US_weight  + GDP_growth + pop_sh14  + GDPpercapita_const2010USD_log + gini_mkt + polity2 + population_log + remittances_GDP + yr_sch  +  urban_interp"
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm1)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (4) change in convicts'deportation rates and change in non-convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_nonconvict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (5) change in convicts'deportation rates and change in leading values of convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_convict_lead + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_LAC <- subset(data, data$region == "Latin America & Caribbean")#
+# here, I subset to those that have WHO data. Although I run the code below on UNODC data in part?	#
+#	data_LAC3 <- subset(data_LAC, !is.na(data_LAC$homrates_who))#
+#
+	Xnms <- " +  corruption + crime_US_weight  + GDP_growth + pop_sh14  + GDPpercapita_const2010USD_log + gini_mkt + polity2 + population_log + remittances_GDP + yr_sch  +  urban_interp"
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (2) #
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+Xnms <- "  + corruption  + GDP_growth + pop_sh14  + GDPpercapita_const2010USD_log + gini_mkt + polity2 + population_log + remittances_GDP + yr_sch  +  urban_interp"
+form_i_plm <- as.formula(paste("homrates_who ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm)) # robust
+form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm)) # robust
+form_i_plm <- as.formula(paste("homrates_who ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm)) # robust
+data_2stp <- subset(data, !is.na(data$homrates_unodc) & !is.na(data$instr_enforce_everify_lag1) & !is.na(data$instr_benef_medicaidpregn_lag1) & !is.na(data$deport_convict))
+dim(data_2stp)
+dim(data)
+data_LAC2stp <- subset(data_LAC, !is.na(data_LAC $homrates_unodc) & !is.na(data_LAC$instr_enforce_everify_lag1) & !is.na(data_LAC$instr_benef_medicaidpregn_lag1) & !is.na(data_LAC $deport_convict))
+data_2stp <- subset(data, !is.na(data$homrates_unodc) & !is.na(data$instr_enforce_everify_lag1) & !is.na(data$instr_benef_medicaidpregn_lag1) & !is.na(data$deport_convict))#
+	data_LAC2stp <- subset(data_LAC, !is.na(data_LAC $homrates_unodc) & !is.na(data_LAC$instr_enforce_everify_lag1) & !is.na(data_LAC$instr_benef_medicaidpregn_lag1) & !is.na(data_LAC $deport_convict))#
+# (1) get 1st step tables for levels#
+	Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_i_plm <- as.formula(paste("deport_convict ~ instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1 + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_2stp, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm)) # robust#
+# (2) get 1st step tables for LAC#
+	form_i_plm <- as.formula(paste("deport_convict ~ instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1 + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC2stp, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))#
+# (3) the 2nd step results#
+	form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms, "| . - deport_convict + as.factor(year)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))		#
+	plm.fe_iv1 <- plm(form_iv , data = data_2stp, model = "within"); summary(plm.fe_iv1); coeftest(plm.fe_iv1, vcov.=vcovHC(plm.fe_iv1))#
+# also run as ivreg to extract some stats#
+# then, use conutry fixed effects too in the formula#
+	form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) + as.factor(iso3) ", Xnms, "| . - deport_convict + as.factor(year) + as.factor(iso3)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))#
+	summary(fit_iv <- ivreg(form_iv, x=TRUE, data = data_2stp))#
+	summary(fit_iv, df = Inf, diagnostics = TRUE) ##
+#
+# (4) the 2nd step results for LAC#
+# here, don't include civil wars as a predictor#
+	Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +   GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms, "| . - deport_convict + as.factor(year)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))		#
+	plm.fe_iv1 <- plm(form_iv , data = data_LAC2stp, model = "within"); summary(plm.fe_iv1); coeftest(plm.fe_iv1, vcov.=vcovHC(plm.fe_iv1))#
+# using ivreg #
+	form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) + as.factor(iso3) ", Xnms, "| . - deport_convict + as.factor(year) + as.factor(iso3)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))#
+	summary(fit_iv <- ivreg(form_iv, x=TRUE, data = data_LAC2stp))#
+	summary(fit_iv, df = Inf, diagnostics = TRUE)
+data_emdc <- subset(data, data$income_group != "High income: OECD")#
+#
+# run the same models#
+# (1) convicts'deportation rates, no controls, only country and year fixed effects#
+	form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_emdc, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))#
+# (2) convicts'deportation rates, with time-varying controls and country fixed effects#
+	Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_emdc, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))#
+# (3) change in convicts'deportation rates, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_emdc, model = "within"); summary(plm.fe_plm1)#
+coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+data <- read.csv("data_replic.csv")	#
+	data <- pdata.frame(data, index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)#
+	data$year <- as.integer(as.vector(data$year))#
+	head(data)
+data <- read.csv("data_replic.csv")	#
+	data <- pdata.frame(data, index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)#
+	data$year <- as.integer(as.vector(data$year))#
+	head(data)#
+# (1) convicts'deportation rates, no controls, only country and year fixed effects#
+	form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (2) convicts'deportation rates, with time-varying controls and country fixed effects#
+#
+# define control variables:#
+	Xnms <- " +  war_intrastate + corruption + crime_US_weight  + GDP_growth + pop_sh14  + GDPpercapita_const2010USD_log + gini_mkt + polity2 + population_log + remittances_GDP + yr_sch  +  urban_interp"#
+#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# (3) change in convicts'deportation rates, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm1)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (4) change in convicts'deportation rates and change in non-convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_nonconvict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (5) change in convicts'deportation rates and change in leading values of convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_convict_lead + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+library(plm)#
+	library(lmtest)#
+	library(clubSandwich)#
+	library(AER)#
+	library (calibrate)#
+# ---------------------------#
+# Figure 2#
+# ---------------------------#
+#
+# show corrrelation between homicides and derpotations#
+# all refers to average values over the period 2000 to 2016, in logs#
+	agg_mean_graph <- read.csv("data_figure1.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot_y <- log(agg_mean_graph$homrates_pc_unodc_mn +1)#
+	plot_x <- log(agg_mean_graph$deport_convict_mn +1)	#
+	PL <- na.omit(data.frame(agg_mean_graph$iso3, plot_x, plot_y))#
+	ytext <- round(exp(seq(from = 0, to= max(plot_y, na.rm=T))), digits=0)-1#
+	xtext <- round(exp(seq(from = 0, to= max(plot_x, na.rm=T))), digits=0)-1#
+	ytext <- c(0,3,5,10,25,50)#
+	xtext <- c(0,3,5,10,25,50,100,250)#
+	plot(PL$plot_x, PL$plot_y, xaxt = "n", yaxt = "n", ylab="homicide rates \n (UNODC, average 2000-2015)", xlab="deportation rates (average 2000-2015)", ylim=c(min(PL$plot_y)-.5, max(PL$plot_y)+.5), xlim=c(-1,5.5), main="", cex.lab=.8)#
+# enlarge the margins a little!	#
+# check correctness of what I ddi here?#
+	axis(2, at= log(ytext+1), labels= ytext, cex.axis = .7)#
+	axis(1, at= log(xtext+1), labels= xtext, cex.axis = .7) # add here the other axis too with value!#
+	textxy(PL$plot_x, PL$plot_y, PL$agg_mean_graph.iso3, cex = .6, col = "black", m = c(1, 1))
+data <- read.csv("data_replic.csv")	#
+	data <- pdata.frame(data, index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)#
+	data$year <- as.integer(as.vector(data$year))#
+	head(data)#
+# (1) convicts'deportation rates, no controls, only country and year fixed effects#
+	form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (2) convicts'deportation rates, with time-varying controls and country fixed effects#
+#
+# define control variables:#
+	Xnms <- " +  war_intrastate + corruption + crime_US_weight  + GDP_growth + pop_sh14  + GDPpercapita_const2010USD_log + gini_mkt + polity2 + population_log + remittances_GDP + yr_sch  +  urban_interp"#
+#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# (3) change in convicts'deportation rates, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm1)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (4) change in convicts'deportation rates and change in non-convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_nonconvict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (5) change in convicts'deportation rates and change in leading values of convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_convict_lead + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust
+data_LAC <- subset(data, data$region == "Latin America & Caribbean")#
+# here, I subset to those that have WHO data. Although I run the code below on UNODC data in part?	#
+#	data_LAC3 <- subset(data_LAC, !is.na(data_LAC$homrates_who))#
+#
+	Xnms <- " +  corruption + crime_US_weight  + GDP_growth + pop_sh14  + GDPpercapita_const2010USD_log + gini_mkt + polity2 + population_log + remittances_GDP + yr_sch  +  urban_interp"
+form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+#
+# (2) #
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm,vcov=vcovHC(plm.fe_plm,type="HC1")) # robust#
+# now, repeat those but use the WHO data and a smaller set of controls#
+# this allows us to go further back in time (until 1992)#
+	Xnms <- "  + corruption  + GDP_growth + pop_sh14  + GDPpercapita_const2010USD_log + gini_mkt + polity2 + population_log + remittances_GDP + yr_sch  +  urban_interp"#
+#
+# (3) for deportation rates in levels#
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm)) # robust#
+#
+# (4) for changes in deportaotin rates#
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm)) # robust
+Xnms <- "  + corruption  + GDP_growth + pop_sh14  + GDPpercapita_const2010USD_log + gini_mkt + polity2 + population_log + remittances_GDP + yr_sch  +  urban_interp"#
+#
+# (3) for deportation rates in levels#
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm)) # robust#
+#
+# (4) for changes in deportaotin rates#
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm)) # robust
+data_2stp <- subset(data, !is.na(data$homrates_unodc) & !is.na(data$instr_enforce_everify_lag1) & !is.na(data$instr_benef_medicaidpregn_lag1) & !is.na(data$deport_convict))#
+	data_LAC2stp <- subset(data_LAC, !is.na(data_LAC $homrates_unodc) & !is.na(data_LAC$instr_enforce_everify_lag1) & !is.na(data_LAC$instr_benef_medicaidpregn_lag1) & !is.na(data_LAC $deport_convict))
+Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_i_plm <- as.formula(paste("deport_convict ~ instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1 + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_2stp, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm)) # robust
+form_i_plm <- as.formula(paste("deport_convict ~ instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1 + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_LAC2stp, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms, "| . - deport_convict + as.factor(year)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))		#
+	plm.fe_iv1 <- plm(form_iv , data = data_2stp, model = "within"); summary(plm.fe_iv1); coeftest(plm.fe_iv1, vcov.=vcovHC(plm.fe_iv1))
+form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) + as.factor(iso3) ", Xnms, "| . - deport_convict + as.factor(year) + as.factor(iso3)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))#
+	summary(fit_iv <- ivreg(form_iv, x=TRUE, data = data_2stp))#
+	summary(fit_iv, df = Inf, diagnostics = TRUE)
+Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +   GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms, "| . - deport_convict + as.factor(year)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))		#
+	plm.fe_iv1 <- plm(form_iv , data = data_LAC2stp, model = "within"); summary(plm.fe_iv1); coeftest(plm.fe_iv1, vcov.=vcovHC(plm.fe_iv1))#
+# using ivreg #
+	form_iv <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) + as.factor(iso3) ", Xnms, "| . - deport_convict + as.factor(year) + as.factor(iso3)  + instr_enforce_everify_lag1 + instr_benef_medicaidpregn_lag1", Xnms))#
+	summary(fit_iv <- ivreg(form_iv, x=TRUE, data = data_LAC2stp))#
+	summary(fit_iv, df = Inf, diagnostics = TRUE)
+data_emdc <- subset(data, data$income_group != "High income: OECD")#
+#
+# run the same models#
+# (1) convicts'deportation rates, no controls, only country and year fixed effects#
+	form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_emdc, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_emdc, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))#
+# (3) change in convicts'deportation rates, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_emdc, model = "within"); summary(plm.fe_plm)#
+coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))#
+# (4) change in convicts'deportation rates and change in non-convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_nonconvict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_emdc, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))#
+# (5) change in convicts'deportation rates and change in leading values of convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_convict_lead + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_emdc, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+use the same years as in the tables that use controls (that is, after 2000)#
+	form_i_plm <- as.formula(("homrates_who ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, subset=year>=2000, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))#
+# (3) change in convicts'deportation rates, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + deport_nonconvict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))#
+#
+# (5) change in convicts'deportation rates and change in leading values of convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_who ~ deport_convict_d + deport_convict_lead + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+data_3y <- pdata.frame(read.csv("data_replic_3y.csv"), index = c("iso3", "year"), drop.index = FALSE, row.names = TRUE)	#
+# run models as in Table 1#
+	# run the same models#
+# (1) convicts'deportation rates, no controls, only country and year fixed effects#
+	form_i_plm <- as.formula(("homrates_unodc ~ deport_convict + as.factor(year) "))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_3y, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))#
+#
+# (2) convicts'deportation rates, with time-varying controls and country fixed effects#
+	Xnms <- " +  remittances_GDP  +  pop_sh14  +  yr_sch  +  population_log  +  GDPpercapita_const2010USD_log  +  gini_mkt  +  war_intrastate  +  GDP_growth  +  crime_US_weight  +  urban_interp  +  polity2  +  corruption"#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_3y, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))#
+#
+# (3) change in convicts'deportation rates, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_3y, model = "within"); summary(plm.fe_plm1)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))#
+#
+# (4) change in convicts'deportation rates and change in non-convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_nonconvict_d + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_3y, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))#
+#
+# (5) change in convicts'deportation rates and change in leading values of convicts'deportation rate, with time-varying controls and country fixed effects#
+	form_i_plm <- as.formula(paste("homrates_unodc ~ deport_convict_d + deport_convict_lead + as.factor(year) ", Xnms))	#
+	plm.fe_plm <- plm(form_i_plm , data = data_3y, model = "within"); summary(plm.fe_plm)#
+	coeftest(plm.fe_plm, vcov.=vcovHC(plm.fe_plm))
+dep_tot <- read.csv("data_USdeporttotal.csv")
+head(dep_tot)
+par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot(dep_tot$YEAR, dep_tot$CONVICT, col="grey")
+plot(dep_tot$YEAR, dep_tot$CONVICT, col="grey", type="l")
+plot(dep_tot$YEAR, dep_tot$CONVICT, col="grey", type="l", ylab= "deportations (in 1000s)", xlab = "")
+plot(dep_tot$YEAR, dep_tot$CONVICT, col="grey", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n")
+axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)
+dep_tot$CONVICT
+dep_tot <- read.csv("data_USdeporttotal.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="grey", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n")#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)
+points(dep_tot$YEAR, dep_tot$CONVICTS, col="grey")
+plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n")
+heaD(dep_tot)
+head(dep_tot)
+plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n")#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey")
+points(dep_tot$YEAR, dep_tot$CONVICT, col="grey", type="l")
+dep_tot <- read.csv("data_USdeporttotal.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n")#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey", type="l")#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)
+abline(h=200000)
+abline(h=200000, type="p")
+? abline
+points(dep_tot$YEAR, dep_tot$CONVICT, col="grey", type="l")	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)#
+	abline(h=200000, col = "grey", lty =2)
+plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n")#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey", type="l")	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)#
+	abline(h=200000, col = "grey", lty =2, lwd=1)
+plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n")#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey", type="l")	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)#
+	abline(h=200000, col = "grey", lty =3, lwd=1)
+plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n")#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey", type="l")	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)#
+	abline(h=200000, col = "grey", lty =4, lwd=1)
+plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n")#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey", type="l")	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)#
+	abline(h=200000, col = "grey", lty =3, lwd=1)
+plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n")#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey", type="l")	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)#
+	abline(h=200000, col = "grey", lty =3, lwd=2)
+plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2)
+points(dep_tot$YEAR, dep_tot$CONVICT, col="grey", type="l", lwd=2)
+points(dep_tot$YEAR, dep_tot$CONVICT, col="grey70", type="l", lwd=2)
+abline(h=200000, col = "grey50", lty =2, lwd=1)
+abline(h=c(200000, 400000), col = "grey50", lty =2, lwd=1)
+axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)
+axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = 1)
+dep_tot <- read.csv("data_USdeporttotal.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2)#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey70", type="l", lwd=2)	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = 1)#
+	abline(h=c(200000, 400000), col = "grey50", lty =2, lwd=1)#
+	 and)
+text("total", 300000, 1990)
+text(300000, 1990,"total")
+text(1990, 300000, "total")
+text(200, 300000, "total")
+text(2000, 300000, "total")
+text(2010, 70000, "convicts", col="grey70")
+text(2010, 70000, "convicts", col="grey90")
+text(2010, 70000, "convicts", col="grey40")
+dep_tot <- read.csv("data_USdeporttotal.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2)#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey40", type="l", lwd=2)	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = 1)#
+	abline(h=c(200000, 400000), col = "gre60", lty =2, lwd=1)t#
+	text(2000, 300000, "total")#
+	text(2010, 70000, "convicts", col="grey40")
+abline(h=c(200000, 400000), col = "gre60", lty =2, lwd=1)t
+abline(h=c(200000, 400000), col = "gre60", lty =2, lwd=1)
+dep_tot <- read.csv("data_USdeporttotal.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2)#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey40", type="l", lwd=2)	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = 1)#
+	abline(h=c(200000, 400000), col = "gre60", lty =2, lwd=1)#
+	text(2000, 300000, "total")#
+	text(2010, 70000, "convicts", col="grey40")
+abline(h=c(200000, 400000))
+abline(h=c(200000, 400000), col = "gre60", lty=2, lwd=1)
+abline(h=c(200000, 400000), col = "grey60", lty=2, lwd=1)
+dep_tot <- read.csv("data_USdeporttotal.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2)#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey40", type="l", lwd=2)	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = 1)#
+	abline(h=c(200000, 400000), col = "grey60", lty=2, lwd=1)#
+	text(2000, 300000, "total")#
+	text(2010, 70000, "convicts", col="grey40")
+par(mar=c(4,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2)#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey40", type="l", lwd=2)	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = 1)#
+	abline(h=c(200000, 400000), col = "grey60", lty=2, lwd=1)#
+	text(2000, 300000, "total")#
+	text(2010, 70000, "convicts", col="grey40")
+agg_mean_graph <- read.csv("data_figure2.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot_y <- log(agg_mean_graph$homrates_pc_unodc_mn +1)#
+	plot_x <- log(agg_mean_graph$deport_convict_mn +1)	#
+	PL <- na.omit(data.frame(agg_mean_graph$iso3, plot_x, plot_y))#
+	ytext <- round(exp(seq(from = 0, to= max(plot_y, na.rm=T))), digits=0)-1#
+	xtext <- round(exp(seq(from = 0, to= max(plot_x, na.rm=T))), digits=0)-1#
+	ytext <- c(0,3,5,10,25,50)#
+	xtext <- c(0,3,5,10,25,50,100,250)
+agg_mean_graph <- read.csv("data_figure2.csv")
+par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),
+plot_y <- log(agg_mean_graph$homrates_pc_unodc_mn +1)#
+	plot_x <- log(agg_mean_graph$deport_convict_mn +1)
+PL <- na.omit(data.frame(agg_mean_graph$iso3, plot_x, plot_y))
+ytext <- round(exp(seq(from = 0, to= max(plot_y, na.rm=T))), digits=0)-1#
+	xtext <- round(exp(seq(from = 0, to= max(plot_x, na.rm=T))), digits=0)-1
+ytext <- c(0,3,5,10,25,50)#
+	xtext <- c(0,3,5,10,25,50,100,250)
+plot(PL$plot_x, PL$plot_y, xaxt = "n", yaxt = "n", ylab="homicide rates \n (UNODC, average 2000-2015)", xlab="deportation rates (average 2000-2015)", ylim=c(min(PL$plot_y)-.5, max(PL$plot_y)+.5), xlim=c(-1,5.5), main="", cex.lab=.8)
+axis(2, at= log(ytext+1), labels= ytext, cex.axis = .7)#
+	axis(1, at= log(xtext+1), labels= xtext, cex.axis = .7) # add here the
+textxy(PL$plot_x, PL$plot_y, PL$agg_mean_graph.iso3, cex = .6, col = "black", m = c(1, 1))
+library (calibrate)
+ll refers to average values over the period 2000 to 2016, in logs#
+	agg_mean_graph <- read.csv("data_figure2.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot_y <- log(agg_mean_graph$homrates_pc_unodc_mn +1)#
+	plot_x <- log(agg_mean_graph$deport_convict_mn +1)	#
+	PL <- na.omit(data.frame(agg_mean_graph$iso3, plot_x, plot_y))#
+	ytext <- round(exp(seq(from = 0, to= max(plot_y, na.rm=T))), digits=0)-1#
+	xtext <- round(exp(seq(from = 0, to= max(plot_x, na.rm=T))), digits=0)-1#
+	ytext <- c(0,3,5,10,25,50)#
+	xtext <- c(0,3,5,10,25,50,100,250)#
+	plot(PL$plot_x, PL$plot_y, xaxt = "n", yaxt = "n", ylab="homicide rates \n (UNODC, average 2000-2015)", xlab="deportation rates (average 2000-2015)", ylim=c(min(PL$plot_y)-.5, max(PL$plot_y)+.5), xlim=c(-1,5.5), main="", cex.lab=.8)#
+	axis(2, at= log(ytext+1), labels= ytext, cex.axis = .7)#
+	axis(1, at= log(xtext+1), labels= xtext, cex.axis = .7) # add here the other axis too with value!#
+	textxy(PL$plot_x, PL$plot_y, PL$agg_mean_graph.iso3, cex = .6, col = "black", m = c(1, 1))
+dep_tot <- read.csv("data_USdeporttotal.csv")#
+	par(mar=c(4,6,2,2), mfrow=c(1,1)) #
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2, cex.axis = .7)
+dep_tot <- read.csv("data_USdeporttotal.csv")#
+	par(mar=c(4,6,2,2), mfrow=c(1,1)) #
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2, cex.axis = .7)#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey40", type="l", lwd=2)	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)#
+	abline(h=c(200000, 400000), col = "grey60", lty=2, lwd=1)#
+	text(2000, 300000, "total")#
+	text(2010, 70000, "convicts", col="grey40")
+par(mar=c(4,6,2,2), mfrow=c(1,1)) #
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2, cex.lab = .8, cex.axis = .7)
+points(dep_tot$YEAR, dep_tot$CONVICT, col="grey40", type="l", lwd=2)	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)#
+	abline(h=c(200000, 400000), col = "grey60", lty=2, lwd=1)#
+	text(2000, 300000, "total")#
+	text(2010, 70000, "convicts", col="grey40")
+dep_tot <- read.csv("data_USdeporttotal.csv")#
+	par(mar=c(4,6,2,2), mfrow=c(1,1)) #
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2, cex.lab = .8, cex.axis = .7)#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey40", type="l", lwd=2)	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)#
+	abline(h=c(200000, 400000), col = "grey60", lty=2, lwd=1)#
+	text(2000, 300000, "total", cex=.8)#
+	text(2010, 70000, "convicts", col="grey40", cex=.8)
+agg_mean_graph <- read.csv("data_figure2.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot_y <- log(agg_mean_graph$homrates_pc_unodc_mn +1)#
+	plot_x <- log(agg_mean_graph$deport_convict_mn +1)	#
+	PL <- na.omit(data.frame(agg_mean_graph$iso3, plot_x, plot_y))#
+	ytext <- round(exp(seq(from = 0, to= max(plot_y, na.rm=T))), digits=0)-1#
+	xtext <- round(exp(seq(from = 0, to= max(plot_x, na.rm=T))), digits=0)-1#
+	ytext <- c(0,3,5,10,25,50)#
+	xtext <- c(0,3,5,10,25,50,100,250)#
+	plot(PL$plot_x, PL$plot_y, xaxt = "n", yaxt = "n", ylab="homicide rates \n (UNODC, average 2000-2015)", xlab="deportation rates (average 2000-2015)", ylim=c(min(PL$plot_y)-.5, max(PL$plot_y)+.5), xlim=c(-1,5.5), main="", cex.lab=.8)#
+	axis(2, at= log(ytext+1), labels= ytext, cex.axis = .7)#
+	axis(1, at= log(xtext+1), labels= xtext, cex.axis = .7) # add here the other axis too with value!#
+	textxy(PL$plot_x, PL$plot_y, PL$agg_mean_graph.iso3, cex = .6, col = "black", m = c(1, 1))
+dep_tot <- read.csv("data_USdeporttotal.csv")#
+	par(mar=c(4,6,2,2), mfrow=c(1,1)) #
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2, cex.lab = .8, cex.axis = .7)#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey40", type="l", lwd=2)	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)#
+	abline(h=c(200000, 400000), col = "grey60", lty=2, lwd=1)#
+	text(2000, 300000, "total", cex=.8)#
+	text(2010, 70000, "convicts", col="grey40", cex=.8)
+agg_mean_graph <- read.csv("data_figure2.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot_y <- log(agg_mean_graph$homrates_pc_unodc_mn +1)#
+	plot_x <- log(agg_mean_graph$deport_convict_mn +1)	#
+	PL <- na.omit(data.frame(agg_mean_graph$iso3, plot_x, plot_y))#
+	ytext <- round(exp(seq(from = 0, to= max(plot_y, na.rm=T))), digits=0)-1#
+	xtext <- round(exp(seq(from = 0, to= max(plot_x, na.rm=T))), digits=0)-1#
+	ytext <- c(0,3,5,10,25,50)#
+	xtext <- c(0,3,5,10,25,50,100,250)#
+	plot(PL$plot_x, PL$plot_y, xaxt = "n", yaxt = "n", ylab="homicide rates \n (UNODC, average 2000-2015)", xlab="deportation rates (average 2000-2015)", ylim=c(min(PL$plot_y)-.5, max(PL$plot_y)+.5), xlim=c(-1,5.5), main="", cex.lab=.8)#
+	axis(2, at= log(ytext+1), labels= ytext, cex.axis = .7)#
+	axis(1, at= log(xtext+1), labels= xtext, cex.axis = .7) # add here the other axis too with value!#
+	textxy(PL$plot_x, PL$plot_y, PL$agg_mean_graph.iso3, cex = .6, col = "black", m = c(1, 1))
+library(plm)#
+	library(lmtest)#
+	library(clubSandwich)#
+	library(AER)#
+	library (calibrate)
+setEPS()
+postscript("figure1.eps") # store eps file#
+	dep_tot <- read.csv("data_USdeporttotal.csv")#
+	par(mar=c(4,6,2,2), mfrow=c(1,1)) #
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2, cex.lab = .8, cex.axis = .7)#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey40", type="l", lwd=2)	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)#
+	abline(h=c(200000, 400000), col = "grey60", lty=2, lwd=1)#
+	text(2000, 300000, "total", cex=.8)#
+	text(2010, 70000, "convicts", col="grey40", cex=.8)
+dev.off()
+setEPS()
+postscript("figure1.eps", width = 20, height = 10) # store eps file#
+	dep_tot <- read.csv("data_USdeporttotal.csv")#
+	par(mar=c(4,6,2,2), mfrow=c(1,1)) #
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2, cex.lab = .8, cex.axis = .7)#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey40", type="l", lwd=2)	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)#
+	abline(h=c(200000, 400000), col = "grey60", lty=2, lwd=1)#
+	text(2000, 300000, "total", cex=.8)#
+	text(2010, 70000, "convicts", col="grey40", cex=.8)
+dev.off()
+postscript("figure1.eps", width = 5, height = 3) # store eps file#
+	dep_tot <- read.csv("data_USdeporttotal.csv")#
+	par(mar=c(4,6,2,2), mfrow=c(1,1)) #
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2, cex.lab = .8, cex.axis = .7)#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey40", type="l", lwd=2)	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)#
+	abline(h=c(200000, 400000), col = "grey60", lty=2, lwd=1)#
+	text(2000, 300000, "total", cex=.8)#
+	text(2010, 70000, "convicts", col="grey40", cex=.8)#
+#	dev.off()
+postscript("figure1.eps", width = 5, height = 3) # store eps file#
+	dep_tot <- read.csv("data_USdeporttotal.csv")#
+	par(mar=c(4,6,2,2), mfrow=c(1,1)) #
+	plot(dep_tot$YEAR, dep_tot$TOTAL, col="black", type="l", ylab= "deportations (in 1000s)", xlab = "", yaxt="n", lwd=2, cex.lab = .8, cex.axis = .7)#
+	points(dep_tot$YEAR, dep_tot$CONVICT, col="grey40", type="l", lwd=2)	#
+	axis(2, at= c(100000,200000,300000,400000), labels= c(100,200,300,400), cex.axis = .7)#
+	abline(h=c(200000, 400000), col = "grey60", lty=2, lwd=1)#
+	text(2000, 300000, "total", cex=.8)#
+	text(2010, 70000, "convicts", col="grey40", cex=.8)#
+	dev.off()
+postscript("figure2.eps", width = 5, height = 3) # store eps file#
+	agg_mean_graph <- read.csv("data_figure2.csv")#
+	par(mar=c(5,6,2,2), mfrow=c(1,1)) #,oma=c(3,2,2,2),#
+	plot_y <- log(agg_mean_graph$homrates_pc_unodc_mn +1)#
+	plot_x <- log(agg_mean_graph$deport_convict_mn +1)	#
+	PL <- na.omit(data.frame(agg_mean_graph$iso3, plot_x, plot_y))#
+	ytext <- round(exp(seq(from = 0, to= max(plot_y, na.rm=T))), digits=0)-1#
+	xtext <- round(exp(seq(from = 0, to= max(plot_x, na.rm=T))), digits=0)-1#
+	ytext <- c(0,3,5,10,25,50)#
+	xtext <- c(0,3,5,10,25,50,100,250)
+plot(PL$plot_x, PL$plot_y, xaxt = "n", yaxt = "n", ylab="homicide rates \n (UNODC, average 2000-2015)", xlab="deportation rates (average 2000-2015)", ylim=c(min(PL$plot_y)-.5, max(PL$plot_y)+.5), xlim=c(-1,5.5), main="", cex.lab=.8)#
+	axis(2, at= log(ytext+1), labels= ytext, cex.axis = .7)#
+	axis(1, at= log(xtext+1), labels= xtext, cex.axis = .7) # add here the other axis too with value!#
+	textxy(PL$plot_x, PL$plot_y, PL$agg_mean_graph.iso3, cex = .6, col = "black", m = c(1, 1))
+dev.off()

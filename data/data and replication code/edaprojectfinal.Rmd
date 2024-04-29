@@ -1,0 +1,517 @@
+---
+title: "EDA notebook"
+author: "Sonia Dalal and Sanjana Malipeddi"
+date: "2024-04-21"
+output: html_document
+---
+## Loading Packages
+```{r}
+
+
+
+library(readr)
+library(tibble)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+data_replic <- read_csv("/Users/soniadalal/Desktop/302W/302W Project/data/data and replication code/data_replic.csv")
+head(data_replic)
+summary(data_replic)
+```
+
+
+## This dataset shows a comprehensive set of variables with demographic, economic, and crime-related metrics across different countries over time. The UNODC recorded homicide rates and deportations of convicts can be used to determine the impact of deportations on crime rates in different regions of home countries. This relationship can also be analyzed through a socioeconomic lense using the income data provided
+
+iso3: ISO 3166-1 alpha-3 country code representing each country.
+year: Year of the data record.
+region: World Bank-defined global region that the country belongs to.
+income_group: World Bank-defined income category of the country (e.g., Low income, Upper middle income).
+homrates_unodc: Homicide rates per 100,000 population as reported by the United Nations Office on Drugs and Crime.
+homrates_who: Homicide rates per 100,000 population as reported by the World Health Organization.
+deport_convict: Deportation rates of convicted individuals per 100,000 population.
+deport_convict_d: Differenced series of deportation rates of convicted individuals, indicating change from the previous year.
+deport_convict_lead: Lead series of deportation rates of convicted individuals, indicating the value for the forthcoming year.
+deport_nonconvict: Deportation rates of non-convicted individuals per 100,000 population.
+corruption: Higher corruption index indicates lower rates of corruption
+instr_enforce_everify_lag1: Previous year's enforcement measure related to electronic verification systems.
+polity2: Score from the Polity IV project measuring the level of democracy and autocracy.
+pop_sh14: Percentage of the population aged under 14 years.
+population_log: Logarithm of the population size to normalize the data.
+remittances_GDP: Remittances received as a percentage of the GDP.
+urban_interp: Urbanization rate interpolated for non-census years.
+war_intrastate: Indicator of whether there was an intrastate war occurring.
+yr_sch: Average years of schooling in the population.
+
+# Remove rows with missing values in key columns, remove NA columns.
+```{r}
+
+df <- data_replic %>%
+  select(-...19, -...23)
+
+newdf <- data_replic %>%
+  select(-...19, -...23) %>%
+  filter(!is.na(deport_nonconvict) & !is.na(homrates_unodc) & !is.na(region) & !is.na(deport_convict) & !is.na(income_group)) 
+newdf
+```
+#Make a correlation plot
+```{r}
+install.packages("corrplot")
+library(corrplot)
+
+```
+```{r}
+df <- df %>%
+  mutate(
+    income_group_numeric = case_when(
+      income_group == "Low income" ~ 1,
+      income_group == "Lower middle income" ~ 2,
+      income_group == "Upper middle income" ~ 3,
+      income_group == "High income: nonOECD" ~ 4,
+      income_group == "High income: OECD" ~ 5,
+      TRUE ~ NA_real_  # Handles any cases that don't match the above
+    )
+  )
+```
+# General overview of correlations between different variables
+```{r}
+# Select relevant variables and remove NA values for correlation analysis
+cor_data <- df %>%
+  select(corruption, homrates_unodc, GDPpercapita_const2010USD_log, urban_interp, year, deport_convict, deport_nonconvict, polity2, yr_sch, income_group_numeric) %>%
+  na.omit()  # Remove rows with NA values
+
+# Calculate the correlation matrix
+cor_matrix <- cor(cor_data)
+corrplot(cor_matrix, method = "color", type = "upper", order = "hclust",
+         addCoef.col = "black",  # Add correlation coefficients to enhance readability
+         tl.col = "black", tl.srt = 45,  # Adjust text label color and rotation for better visibility
+         diag = FALSE,  # Exclude diagonal elements to avoid redundancy
+         number.cex = 0.8,  # Adjust size of correlation coefficients
+         tl.cex = 0.8)
+```
+Shows that as deportation increases, homicide rates increase but over the years available in the data, homicide rates and deportations rates did not increase significantly.
+
+#Income distribution Counts in dataset for each region
+```{r}
+# Bar plot
+ggplot(df, aes(x = region, fill = income_group)) +
+  geom_bar(position = "dodge") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Income Distribution Counts for Each Region")
+```
+More data on income group is available for Latin America & Caribbean and Europe and Central Asia than other regions.
+#Convict Deportation distribution in dataset by Region
+```{r}
+# Bar plot
+ggplot(df, aes(x = region, fill = deport_convict)) +
+  geom_bar(position = "dodge") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Convict Deportation Rate Distribution Counts per Region")
+```
+More data on convict deportation is available for Latin America & Caribbean and Europe and Central Asia than other regions.
+#Non-Convict Deportation distribution in dataset by Region
+```{r}
+# Bar plot
+ggplot(df, aes(x = region, fill = deport_nonconvict)) +
+  geom_bar(position = "dodge") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Non-Convict Deportation Rate Distribution Counts per Region")
+```
+
+More data on deportation of nonconvicts is available for Latin America & Caribbean and Europe and Central Asia than other regions.
+#Corruption distribution in dataset by Region
+```{r}
+# Bar plot
+ggplot(df, aes(x = region, fill = corruption)) +
+  geom_bar(position = "dodge") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Corruption Score Distribution Counts per Region")
+```
+More data on corruption is available for Latin America & Caribbean and Europe and Central Asia than other regions.
+# Boxplot of Corruption Scores for all the Regions
+```{r}
+# Filter the dataset to include only relevant variables
+
+corruption_data <- data_replic %>%
+  select(region, corruption)
+
+# Summary statistics by region
+summary_stats <- corruption_data %>%
+  group_by(region) %>%
+  summarise(mean_corruption = mean(corruption, na.rm = TRUE),
+            median_corruption = median(corruption, na.rm = TRUE),
+            min_corruption = min(corruption, na.rm = TRUE),
+            max_corruption = max(corruption, na.rm = TRUE))
+
+# Visualization: Box plot of corruption scores by region
+boxplot_corruption <- ggplot(corruption_data, aes(x = region, y = corruption, fill = region)) +
+  geom_boxplot() +
+  labs(title = "Corruption Scores by Region",
+       x = "Region",
+       y = "Corruption Score") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))  # Rotate x-axis labels for better readability
+
+# Display the summary statistics and box plot
+print(summary_stats)
+print(boxplot_corruption)
+
+
+```
+
+Latin America & Caribbean have more corruption on average than Europe & Central Asia
+#Income distribution proportions for each region in data with no NA for deportation or homicides.
+```{r}
+# Calculate the count per income group within each region
+newdf_with_count <- newdf %>%
+  group_by(region, income_group) %>%
+  summarise(count = n(), .groups = 'drop')
+new
+# Calculate the total count per region
+totals <- newdf_with_count %>%
+  group_by(region) %>%
+  summarise(total = sum(count), .groups = 'drop')
+
+# Join the totals back to the original data frame
+newdf_with_proportions <- newdf_with_count %>%
+  left_join(totals, by = "region") %>%
+  mutate(proportion = count / total)
+
+# Plot the proportions instead of count
+ggplot(newdf_with_proportions, aes(x = region, y = proportion, fill = income_group)) +
+  geom_bar(position = "dodge", stat = "identity") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylab("Proportion")
+```
+Europe & Central Asia has a higher proportion of High income whereas Latin America & Caribbean has a higher proportion of Upper middle income.
+
+#Income distribution proportions for each region with darker colors corresponding to lower income
+```{r}
+# Order the income_group factor based on income levels from highest to lowest
+newdf_with_proportions$income_group <- factor(
+  newdf_with_proportions$income_group, 
+  levels = c(
+    "Low income",
+    "Lower middle income",
+    "Upper middle income",
+    "High income: nonOECD",
+    "High income: OECD" 
+    
+  ),
+  ordered = TRUE
+)
+ggplot(newdf_with_proportions, aes(x = region, y = proportion, fill = income_group)) +
+  geom_bar(stat = "identity", position = position_dodge(preserve = 'single')) +
+  scale_fill_brewer(palette = "Blues", direction = -1) + # Use reversed Blues palette for darker colors on lower incomes
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(y = "Proportion", fill = "Income Group")
+
+```
+# Correlational plot with Convict Deportation Rates and Homicide Rates by Region (Scaled and Unscaled)
+```{r}
+ggplot(newdf, aes(x = deport_convict, y = homrates_unodc)) +
+  geom_point(aes(color = region), alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ region, scale = "free") +
+  labs(title = "Correlation Between Convict Deportation Rates and Homicide Rates by Region",
+       x = "Convict Deportation Rate",
+       y = "UNODC Homicide Rate")
+
+ggplot(newdf, aes(x = deport_convict, y = homrates_unodc)) +
+  geom_point(aes(color = region), alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ region) +
+  labs(title = "Correlation Between Convict Deportation Rates and Homicide Rates by Region",
+       x = "Non-Convict Deportation Rate",
+       y = "UNODC Homicide Rate")
+correlation_by_region <- newdf %>%
+  group_by(region) %>%
+  summarize(correlation = cor(deport_convict, homrates_unodc, use = "complete.obs"))
+
+print(correlation_by_region)
+```
+# Correlational plot with Non-Convict Deportation Rates and Homicide Rates by Region (Scaled and Unscaled)
+```{r}
+ggplot(newdf, aes(x = deport_nonconvict, y = homrates_unodc)) +
+  geom_point(aes(color = region), alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ region, scale = "free") +
+  labs(title = "Correlation Between Non-Convict Deportation Rates and Homicide Rates by Region",
+       x = "Non-Convict Deportation Rate",
+       y = "UNODC Homicide Rate")
+
+ggplot(newdf, aes(x = deport_nonconvict, y = homrates_unodc)) +
+  geom_point(aes(color = region), alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ region) +
+  labs(title = "Correlation Between Non-Convict Deportation Rates and Homicide Rates by Region",
+       x = "Non-Convict Deportation Rate",
+       y = "UNODC Homicide Rate")
+
+correlation_by_region2 <- newdf %>%
+  group_by(region) %>%
+  summarize(correlation = cor(deport_nonconvict, homrates_unodc, use = "complete.obs"))
+
+print(correlation_by_region2)
+```
+These correlational plots show the most comprehensive data for non-convicts and convicts for Latin American and the Carribean. For this reason we will forcus on this region.
+# Distribution of Years in the Dataset
+```{r}
+
+
+# Preparing the data by ensuring 'year' is available and correctly formatted
+newdf <- mutate(newdf, year = as.integer(year))
+
+# Combine into one dataframe for plotting
+
+# Plotting the histogram of year distributions across datasets
+ggplot(newdf, aes(x = year)) +
+  geom_histogram(position = "identity", alpha = 0.5, binwidth = 1) +
+  labs(title = "Distribution of Years", x = "Year", y = "Count") +
+  scale_fill_manual(values = c("blue", "red", "green")) +
+  theme_minimal()
+
+```
+Data only available from 2004 to 2014. This plus the correlation plot shows a limitation that there hasn't been much change in the variables which may make it more difficult to find relationships in this time. 
+
+```{r}
+# Filter the dataset for Latin America & Caribbean region
+latin_america_data <- newdf %>%
+  filter(region == "Latin America & Caribbean")
+
+# Impute missing data for odd years using linear interpolation
+imputed_data1 <- latin_america_data %>%
+  tidyr::complete(year = seq(min(year), max(year), by = 2)) %>%
+  mutate(homrates_unodc = approx(year[!is.na(homrates_unodc)], homrates_unodc[!is.na(homrates_unodc)], year)$y)
+
+# Create the line plot
+ggplot(imputed_data1, aes(x = year, y = homrates_unodc)) +
+  geom_line() +
+  labs(title = "Homicide Rates in Latin America & Caribbean",
+       x = "Year",
+       y = "Homicide Rates (per 100,000 population)") +
+  theme_minimal()
+```
+```{r}
+
+
+# Filter the dataset for Latin America & Caribbean region
+europe_central_asia_data <- newdf %>%
+  filter(region == "Europe & Central Asia")
+
+# Impute missing data for odd years using linear interpolation
+imputed_data2 <- europe_central_asia_data %>%
+  tidyr::complete(year = seq(min(year), max(year), by = 2)) %>%
+  mutate(homrates_unodc = approx(year[!is.na(homrates_unodc)], homrates_unodc[!is.na(homrates_unodc)], year)$y)
+
+# Create the line plot
+ggplot(imputed_data2, aes(x = year, y = homrates_unodc)) +
+  geom_line() +
+  labs(title = "Homicide Rates in Europe and Central Asia",
+       x = "Year",
+       y = "Homicide Rates (per 100,000 population)") +
+  theme_minimal()
+
+```
+```{r}
+combined_data <- rbind(imputed_data1, imputed_data2)
+ggplot(combined_data, aes(x = year, y = homrates_unodc, color = region)) +
+  geom_line() +
+  labs(title = "Homicide Rates in Latin America & Caribbean vs. Europe & Central Asia",
+       x = "Year",
+       y = "Homicide Rates (per 100,000 population)") +
+  theme_minimal() +
+  scale_color_manual(values = c("blue", "red"))
+```
+Europe and Central Asia Homicide rates are low and slightly decrease over the years while homicide rates in Latin America and the Caribbean are much higher and increase then decrease.
+# Make new dataset with just Latin America and the Caribbean
+```{r}
+# Filter the dataset for Latin America & Caribbean region
+latin_america_data <- newdf %>%
+  filter(region == "Latin America & Caribbean")
+
+# Impute missing data for odd years using linear interpolation
+imputed_data <- latin_america_data %>%
+  tidyr::complete(year = seq(min(year), max(year), by = 2)) %>%
+  mutate(homrates_unodc = approx(year[!is.na(homrates_unodc)], homrates_unodc[!is.na(homrates_unodc)], year)$y,
+         deport_convict = approx(year[!is.na(deport_convict)], deport_convict[!is.na(deport_convict)], year)$y,
+         deport_nonconvict = approx(year[!is.na(deport_nonconvict)], deport_nonconvict[!is.na(deport_nonconvict)], year)$y)
+
+# Create the line plot
+ggplot(imputed_data, aes(x = year, y = homrates_unodc)) +
+  geom_line(aes(color = "Homicide Rates"), size = 1) +
+  geom_line(aes(y = deport_convict, color = "Convict Deportation Rates"), linetype = "dashed", size = 1) +
+  geom_line(aes(y = deport_nonconvict, color = "Non-Convict Deportation Rates"), linetype = "dotdash", size = 1) +
+  labs(title = "Homicide and Deportation Rates in Latin America & Caribbean",
+       x = "Year",
+       y = "Rates per 100,000 population",
+       color = "Legend") +
+  scale_color_manual(values = c("Homicide Rates" = "red",
+                                "Convict Deportation Rates" = "blue",
+                                "Non-Convict Deportation Rates" = "green")) +
+  theme_minimal() +
+  theme(legend.title = element_blank())
+
+```
+```{r}
+# Filter data for Europe & Central Asia
+europe_data <- newdf %>%
+  filter(region == "Europe & Central Asia")
+
+# Impute missing data for odd years using linear interpolation
+imputed_europe_data <- europe_data %>%
+  tidyr::complete(year = seq(min(year), max(year), by = 2)) %>%
+  mutate(homrates_unodc = approx(year[!is.na(homrates_unodc)], homrates_unodc[!is.na(homrates_unodc)], year)$y,
+         deport_convict = approx(year[!is.na(deport_convict)], deport_convict[!is.na(deport_convict)], year)$y,
+         deport_nonconvict = approx(year[!is.na(deport_nonconvict)], deport_nonconvict[!is.na(deport_nonconvict)], year)$y)
+
+# Create the plot for Europe & Central Asia
+plot_europe <- ggplot(imputed_europe_data) +
+  geom_line(aes(x = year, y = homrates_unodc, color = "Homicide Rates"), size = 1) +
+  geom_line(aes(x = year, y = deport_convict, color = "Convict Deportation Rates"), size = 1, linetype = "dashed") +
+  geom_line(aes(x = year, y = deport_nonconvict, color = "Non-Convict Deportation Rates"), size = 1, linetype = "dotdash") +
+  labs(title = "Homicide and Deportation Rates in Europe & Central Asia",
+       x = "Year",
+       y = "Rates per 100,000 population",
+       color = "Legend") +
+  scale_color_manual(values = c("Homicide Rates" = "red",
+                                "Convict Deportation Rates" = "blue",
+                                "Non-Convict Deportation Rates" = "green")) +
+  theme_minimal() +
+  theme(legend.title = element_blank())
+
+# Display the plot for Europe & Central Asia
+plot_europe
+
+
+```
+```{r}
+latin_america_tot <- df %>%
+  filter(region == "Latin America & Caribbean")
+
+imputed_latin_america_tot <- latin_america_tot %>%
+  tidyr::complete(year = seq(min(year), max(year), by = 2)) %>%
+  mutate(deport_convict = approx(year[!is.na(deport_convict)], deport_convict[!is.na(deport_convict)], year)$y,
+         deport_nonconvict = approx(year[!is.na(deport_nonconvict)], deport_nonconvict[!is.na(deport_nonconvict)], year)$y)
+
+ggplot(imputed_latin_america_tot) +
+  geom_line(aes(x = year, y = deport_convict, color = "Convict Deportation Rates"), size = 1) +
+  geom_line(aes(x = year, y = deport_nonconvict, color = "Non-Convict Deportation Rates"), size = 1) +
+  labs(title = "Deportation Rates in Latin America & Caribbean",
+       x = "Year",
+       y = "Rates per 100,000 population",
+       color = "Legend") +
+  scale_color_manual(values = c("Convict Deportation Rates" = "blue",
+                                "Non-Convict Deportation Rates" = "green")) +
+  theme_minimal() +
+  theme(legend.title = element_blank())
+```
+```{r}
+europe_tot <- df %>%
+  filter(region == "Europe & Central Asia")
+
+imputed_europe_tot <- europe_tot %>%
+  tidyr::complete(year = seq(min(year), max(year), by = 2)) %>%
+  mutate(deport_convict = approx(year[!is.na(deport_convict)], deport_convict[!is.na(deport_convict)], year)$y,
+         deport_nonconvict = approx(year[!is.na(deport_nonconvict)], deport_nonconvict[!is.na(deport_nonconvict)], year)$y)
+
+ggplot(imputed_europe_tot) +
+  geom_line(aes(x = year, y = deport_convict, color = "Convict Deportation Rates"), size = 1) +
+  geom_line(aes(x = year, y = deport_nonconvict, color = "Non-Convict Deportation Rates"), size = 1) +
+  labs(title = "Deportation Rates in Latin America & Caribbean",
+       x = "Year",
+       y = "Rates per 100,000 population",
+       color = "Legend") +
+  scale_color_manual(values = c("Convict Deportation Rates" = "blue",
+                                "Non-Convict Deportation Rates" = "green")) +
+  theme_minimal() +
+  theme(legend.title = element_blank())
+```
+```{r}
+
+# Filter the dataset to include only relevant variables and regions
+region_data <- data_replic %>%
+  filter(region %in% c("Latin America & Caribbean", "Europe & Central Asia")) %>%
+  select(region, corruption, homrates_unodc)
+
+# Visualization: Scatter plot of corruption scores vs. homicide rates by region
+scatter_plot <- ggplot(region_data, aes(x = corruption, y = homrates_unodc, color = region)) +
+  geom_point() +
+  labs(title = "Corruption Scores vs. Homicide Rates",
+       x = "Corruption Score",
+       y = "Homicide Rate",
+       color = "Region") +
+  theme_minimal()
+
+# Display the scatter plot
+print(scatter_plot)
+
+```
+```{r}
+
+ggplot(newdf, aes(x = corruption, y = deport_convict)) +
+  geom_point(aes(color = region), alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ region, scale = "free") +
+  labs(title = "Correlation Between Corruption Scores and Convict Deportation Rates by Region",
+       x = "Corruption Score",
+       y = "Convict Deportation Rate")
+
+ggplot(newdf, aes(x = corruption, y = deport_convict)) +
+  geom_point(aes(color = region), alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ region) +
+  labs(title = "Correlation Between Corruption Scores and Convict Deportation Rates by Region",
+       x = "Corruption Score",
+       y = "Convict Deportation Rate")
+```
+```{r}
+
+ggplot(newdf, aes(x = corruption, y = deport_nonconvict)) +
+  geom_point(aes(color = region), alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ region, scale = "free") +
+  labs(title = "Corruption Scores & Non-Convict Deportation Rates by Region",
+       x = "Corruption Score",
+       y = "Non-Convict Deportation Rate")
+
+ggplot(newdf, aes(x = corruption, y = deport_nonconvict)) +
+  geom_point(aes(color = region), alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  facet_wrap(~ region) +
+  labs(title = "Corruption Scores & Non-Convict Deportation Rates by Region",
+       x = "Corruption Score",
+       y = "Non-Convict Deportation Rate")
+```
+
+```{r}
+mean_rates <- newdf %>%
+  group_by(region) %>%
+  summarize(mean_homicide_rate = mean(homrates_unodc, na.rm = TRUE),
+            mean_deport_convict = mean(deport_convict, na.rm = TRUE),
+            mean_deport_nonconvict = mean(deport_nonconvict, na.rm = TRUE))
+
+ggplot(mean_rates, aes(x = region)) +
+  geom_bar(aes(y = mean_homicide_rate), stat = "identity", position = "dodge", fill = "blue") +
+  labs(title = "Mean Homicide Rates by Region (2004-2014)",
+       x = "Region",
+       y = "Rate") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  
+ggplot(mean_rates, aes(x = region)) +
+  geom_bar(aes(y = mean_deport_convict), stat = "identity", position = "dodge", fill = "red") +
+  labs(title = "Mean Convict Deportation Rates by Region (2004-2014)",
+       x = "Region",
+       y = "Rate") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplot(mean_rates, aes(x = region)) +
+  geom_bar(aes(y = mean_deport_nonconvict), stat = "identity", position = "dodge", fill = "green") +
+  labs(title = "Mean Non-Convict Rates by Region (2004-2014)",
+       x = "Region",
+       y = "Rate") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+```
+
+
