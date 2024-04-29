@@ -24,6 +24,7 @@ Welcome to the QTM302W project repository! This repository contains all the mate
 
 - R
 - RStudio
+- HTML
 
 ## Project Description
 
@@ -50,7 +51,12 @@ The repository includes code for generating various visualizations to analyze th
 
 ## Getting Started
 
-In this repository, you will find:
+To get started with the project, follow these steps:
+
+1. Clone this repository to your local machine.
+2. Navigate to the raw data being kept in files/dataset within this repository
+3. Run the notebook to reproduce the analysis that is being kepy in notebooks/EDA
+
 
 ###  EDA Code Notebook: 
 Our exploratory data analysis (EDA) code notebook, which includes code to replicate and further explore our findings.
