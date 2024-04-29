@@ -62,22 +62,23 @@ Includes renv files that enable users to clone this repository to replicate the 
 Feel free to explore the materials in this repository and replicate our analysis. We encourage collaboration and further exploration of the topics covered in our project.
 
 ## Directory Structure
-project_root/
-│
-├── data/
-│ ├── data_file1.csv
-│ └── data_file2.xlsx
-│
-├── notebooks/
-│ ├── analysis_notebook.ipynb
-│ └── visualization_notebook.ipynb
-│
-├── scripts/
-│ ├── data_processing_script.py
-│ └── visualization_script.py
-│
-├── README.md
-└── requirements.txt
+.
+└── Edit me to generate/
+    ├── a/
+    │   └── nice/
+    │       └── tree/
+    │           ├── diagram!
+    │           └── :)
+    └── Use indentation/
+        ├── to indicate/
+        │   ├── file
+        │   ├── and
+        │   ├── folder
+        │   └── nesting.
+        └── You can even/
+            └── use/
+                ├── markdown
+                └── bullets!
 
 ## Contact Info
 
