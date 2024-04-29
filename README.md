@@ -1,4 +1,4 @@
-# QTM302W Project Repository
+# QTM302W Project
 Welcome to the QTM302W project repository! This repository contains all the materials related to our semester-long project on exploratory and rhetorical analysis of quantitative data.
 
 ## Project Description
