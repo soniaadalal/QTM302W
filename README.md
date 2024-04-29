@@ -1,14 +1,55 @@
-# QTM302W Project
+# The Forced Return of Migrants: Violence
 Welcome to the QTM302W project repository! This repository contains all the materials related to our semester-long project on exploratory and rhetorical analysis of quantitative data.
 
-## Project Description
-Our project focuses on understanding the impact of US deportations on levels of violent crime in Latin America and the Caribbean, based on the study "Exporting Murder: US deportations and the Spread of Violence". We explore various factors, including deportation rates, corruption scores, and income groups, to investigate their associations with homicide rates in the region.
+[![Binder](http://mybinder.org/badge_logo.svg)](http://mybinder.org/v2/gh/soniaadalal/QTM302W/main?urlpath=rstudio)
 
-## Goals
+## Contributing Authors
+
+- Sonia Dalal, Emory University
+- Sanjana Malipeddi, Emory University
+
+## Objectives and Goals
+
 - To analyze the relationship between US deportations and violent crime in Latin America and the Caribbean.
 - To explore the influence of deportation rates, corruption scores, and income groups on homicide rates.
 - To provide insights into the potential factors contributing to violence in the region.
-## Interacting with the Repository
+
+## Methods
+
+- Exploratory Data Analysis (EDA)
+- Statistical Modeling
+- Data Visualization
+
+## Platforms/Languages
+
+- R
+- RStudio
+
+## Project Description
+
+Our project focuses on understanding the impact of US deportations on levels of violent crime in Latin America and the Caribbean, based on the study "Exporting Murder: US deportations and the Spread of Violence". We explore various factors, including deportation rates, corruption scores, and income groups, to investigate their associations with homicide rates in the region.
+
+### Research Questions
+
+Our research aims to investigate deportation as one of the major factors corresponding to violence in the country of origin. 
+
+Hypothesis: There exists a correlation between income groups, deportation rates, corruption, and  homicide rates
+
+Higher deportation may be associated with higher homicide rates. 
+Deportation of lower-income groups may be associated with higher homicide rates. 
+Lower corruption scores indicating higher percieved corruption of the government may be associated with higher homicide rates. 
+
+### Models and Visualization Techniques
+- We are using [specific models or techniques] to [describe how you're using them].
+
+### Current Challenges
+- Currently, we are facing [briefly describe the challenges you're encountering].
+
+### Next Steps (Future Directions)
+- Our next steps include [mention potential future directions or plans].
+
+## Getting Started
+
 In this repository, you will find:
 
 ###  EDA Code Notebook: 
@@ -19,3 +60,35 @@ Any datasets used in our analysis will be included in the "data" folder.
 Includes renv files that enable users to clone this repository to replicate the computing environment with the libraries our analysis depended on.
 
 Feel free to explore the materials in this repository and replicate our analysis. We encourage collaboration and further exploration of the topics covered in our project.
+
+## Directory Structure
+project_root/
+│
+├── data/
+│ ├── data_file1.csv
+│ └── data_file2.xlsx
+│
+├── notebooks/
+│ ├── analysis_notebook.ipynb
+│ └── visualization_notebook.ipynb
+│
+├── scripts/
+│ ├── data_processing_script.py
+│ └── visualization_script.py
+│
+├── README.md
+└── requirements.txt
+
+## Contact Info
+
+For any inquiries or feedback, feel free to contact us at spdalal@emory.edu.
+
+
+
+
+
+
+
+
+
+
