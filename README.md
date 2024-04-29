@@ -62,7 +62,7 @@ Includes renv files that enable users to clone this repository to replicate the 
 Feel free to explore the materials in this repository and replicate our analysis. We encourage collaboration and further exploration of the topics covered in our project.
 
 ## Directory Structure
-.
+```
 └── Edit me to generate/
     ├── a/
     │   └── nice/
@@ -79,6 +79,7 @@ Feel free to explore the materials in this repository and replicate our analysis
             └── use/
                 ├── markdown
                 └── bullets!
+```
 
 ## Contact Info
 
