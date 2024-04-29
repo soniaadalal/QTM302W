@@ -1,7 +1,16 @@
-# QTM302W
-### Through the course of QTM302W, we worked on a semester-long project to understand exploratory and rhetorical analysis of quantitative data. Our project forms from the study "Exporting Murder: US deportations and the Spread of Violence" where the large focus was on the impact of US deportations of convicts on levels of violent crime in Latin America and the Caribbean. 
-### The United States is the largest destination for migrants in the world, with an accumulated number of deportees of almost 5.4 million between 1997 and 2015. Of these, where approximately 40%, or roughly 2.2 million had a criminal record. 
-### Our research aims to investigate not only deportation as one of the major factors corresponding to violence in the country of origin but also corruption, and income groups.
-#### We hypothesized that higher deportation numbers, deportation of lower-income groups, and lower corruption scores indicating higher percieved corruption of the government may be associated with higher homicide rates.
+#QTM302W Project Repository
+###Welcome to the QTM302W project repository! This repository contains all the materials related to our semester-long project on exploratory and rhetorical analysis of quantitative data.
 
-## Within this repository you will find numerous aspects of our project. Our EDA code notebook to replicate or further our findings. 
+##Project Description
+###Our project focuses on understanding the impact of US deportations on levels of violent crime in Latin America and the Caribbean, based on the study "Exporting Murder: US deportations and the Spread of Violence". We explore various factors, including deportation rates, corruption scores, and income groups, to investigate their associations with homicide rates in the region.
+
+##Goals
+### - To analyze the relationship between US deportations and violent crime in Latin America and the Caribbean.
+### - To explore the influence of deportation rates, corruption scores, and income groups on homicide rates.
+### - To provide insights into the potential factors contributing to violence in the region.
+## Interacting with the Repository
+####In this repository, you will find:
+
+###EDA Code Notebook: Our exploratory data analysis (EDA) code notebook, which includes code to replicate and further explore our findings.
+###Data Files: Any datasets used in our analysis will be included in the "data" folder.
+###Feel free to explore the materials in this repository and replicate our analysis. We encourage collaboration and further exploration of the topics covered in our project.
