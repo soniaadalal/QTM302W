@@ -11,9 +11,11 @@ Our project focuses on understanding the impact of US deportations on levels of 
 ## Interacting with the Repository
 In this repository, you will find:
 
-### EDA Code Notebook: 
+###  EDA Code Notebook: 
 Our exploratory data analysis (EDA) code notebook, which includes code to replicate and further explore our findings.
 ### Data Files: 
 Any datasets used in our analysis will be included in the "data" folder.
+### Replicating Environment
+Includes renv files that enable users to clone this repository to replicate the computing environment with the libraries our analysis depended on.
 
 Feel free to explore the materials in this repository and replicate our analysis. We encourage collaboration and further exploration of the topics covered in our project.
